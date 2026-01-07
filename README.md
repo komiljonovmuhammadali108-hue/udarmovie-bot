@@ -1,6 +1,5 @@
 # udarmovie-bot
 AIogram asosidagi Telegram bot. TMDB API orqali kinolar haqida tavsif, rasm va treylerlarni ko‘rsatadi.
-main.py
 import telebot
 from telebot import types
 
@@ -59,5 +58,7 @@ services:
   - type: worker
     name: udarmovie-bot
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python main.py"
+    buildCommand: pip install -r requirements.txt
+    main.py
+render.yaml
+    startCommand: python main.py
