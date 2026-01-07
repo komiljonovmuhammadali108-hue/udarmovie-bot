@@ -1,5 +1,3 @@
-# udarmovie-bot
-AIogram asosidagi Telegram bot. TMDB API orqali kinolar haqida tavsif, rasm va treylerlarni ko‘rsatadi.
 import telebot
 from telebot import types
 
@@ -20,9 +18,13 @@ def check_sub(user_id):
 @bot.message_handler(commands=['start'])
 def start(message):
     if not check_sub(message.from_user.id):
-        btn = types.InlineKeyboardMarkup()
-        btn.add(types.InlineKeyboardButton("📢 Kanalga obuna bo‘lish", url=f"https://t.me/{CHANNEL[1:]}"))
-        bot.send_message(message.chat.id, "❗ Avval kanalga obuna bo‘ling", reply_markup=btn)
+        kb = types.InlineKeyboardMarkup()
+        kb.add(types.InlineKeyboardButton("📢 Kanalga obuna bo‘lish", url=f"https://t.me/{CHANNEL[1:]}"))
+        bot.send_message(
+            message.chat.id,
+            "❗ Botdan foydalanish uchun kanalga obuna bo‘ling",
+            reply_markup=kb
+        )
         return
     bot.send_message(message.chat.id, "🎬 Kino kodi yuboring\nAdmin: /add")
 
@@ -43,14 +45,14 @@ def get_video(message, code):
         bot.send_message(message.chat.id, "❌ Video yuboring")
         return
     movies[code] = message.video.file_id
-    bot.send_message(message.chat.id, f"✅ Saqlandi\nKodi: {code}")
+    bot.send_message(message.chat.id, f"✅ Kino saqlandi\nKodi: {code}")
 
 @bot.message_handler(content_types=['text'])
 def send_movie(message):
     if message.text in movies:
         bot.send_video(message.chat.id, movies[message.text])
     else:
-        bot.send_message(message.chat.id, "❌ Topilmadi")
+        bot.send_message(message.chat.id, "❌ Bunday kino yo‘q")
 
 bot.infinity_polling()
 pyTelegramBotAPI
@@ -59,6 +61,4 @@ services:
     name: udarmovie-bot
     env: python
     buildCommand: pip install -r requirements.txt
-    main.py
-render.yaml
     startCommand: python main.py
